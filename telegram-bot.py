@@ -14,7 +14,10 @@ class TelegramBot:
     def __init__(self, apiKeyFilename="APIKEY", currentUpdateIdFilename="CURRENTUPDATEID"):
         self.baseUrl = self.__getBaseUrl(apiKeyFilename)
         if self.baseUrl == None:
-            print("No API key found")
+            raise FileNotFoundError("No API key found")
+        getMe = self.getMe()
+        if getMe['ok'] == False:
+            raise RuntimeError("API key does not work", getMe)
 
         self.currentUpdateIdFilename = currentUpdateIdFilename
         content = self.__readFile(currentUpdateIdFilename)
@@ -55,6 +58,9 @@ class TelegramBot:
 
     def handleUpdates(self):
         updates = self.getUpdates()
+        if not 'result' in updates:
+            print("No updates found:", updates)
+            return
         # TODO error handling
         for update in updates['result']:
             update_id = int(update['update_id'])

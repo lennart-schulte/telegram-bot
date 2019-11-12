@@ -14,3 +14,9 @@ pip3 install -r requirements.txt
 
 python3 telegram-bot.py
 ```
+
+With Docker:
+```
+docker build -t telegram-bot .
+docker run telegram-bot
+```
